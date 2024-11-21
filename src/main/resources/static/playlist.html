@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Music Finder</title>
+    <link href="stylesheets/main.css" rel="stylesheet">
+    <link href="stylesheets/playlist_style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<!-- # Detta är bakgrundbilden -->
+<svg preserveAspectRatio="xMidYMid slice" viewBox="10 10 80 80" id="background">
+  <path fill="#9b5de5" class="out-top"
+        d="M37-5C25.1-14.7,5.7-19.1-9.2-10-28.5,1.8-32.7,31.1-19.8,49c15.5,21.5,52.6,22,67.2,2.3C59.4,35,53.7,8.5,37-5Z" />
+  <path fill="#f15bb5" class="in-top"
+        d="M20.6,4.1C11.6,1.5-1.9,2.5-8,11.2-16.3,23.1-8.2,45.6,7.4,50S42.1,38.9,41,24.5C40.2,14.1,29.4,6.6,20.6,4.1Z" />
+  <path fill="#00bbf9" class="out-bottom"
+        d="M105.9,48.6c-12.4-8.2-29.3-4.8-39.4.8-23.4,12.8-37.7,51.9-19.1,74.1s63.9,15.3,76-5.6c7.6-13.3,1.8-31.1-2.3-43.8C117.6,63.3,114.7,54.3,105.9,48.6Z" />
+  <path fill="#00f5d4" class="in-bottom"
+        d="M102,67.1c-9.6-6.1-22-3.1-29.5,2-15.4,10.7-19.6,37.5-7.6,47.8s35.9,3.9,44.5-12.5C115.5,92.6,113.9,74.6,102,67.1Z" />
+</svg>
+
+<body class="bg-dark">
+<!-- # Här börjar sidans content -->
+
+<!-- # Detta är navbaren som är i toppen av sidan  -->
+<nav class="navbar">
+  <div class="container-fluid">
+    <span class="navbar-brand navbar-expand-lg text-white mb-0 h1"><a href="/" class="link-light" id="home"> Home </a> </span>
+  </div>
+</nav>
+
+<!-- # Detta är sökrutan som är i toppen av sidan -->
+<!-- HÄR SKA MAN SÖKA EFTER EN ANVÄNDARE-->
+<form onsubmit="return false;">
+  <!-- Adding onsubmit="return false;" prevents the form from submitting and refreshing the page -->
+
+  <div class="input-group mb-3 position-absolute top-0 start-50 translate-middle w-50 mt-4">
+    <label for="username"></label>
+    <input
+      id="username"
+      type="text"
+      class="form-control"
+      placeholder="enter a Spotify username"
+      aria-label="Recipient's username"
+      aria-describedby="basic-addon2"
+      onkeydown="if(event.key === 'Enter') checkUser();"
+    />
+    <div class="input-group-append">
+      <button class="btn btn-success" type="button" onclick="checkUser()">Search</button>
+      <span class="badge bg-danger badge-danger position-absolute top-0 start-50 translate-middle no_user" id="no_user_playlist">The user does not exist or does not have any public playlists</span>
+
+    </div>
+  </div>
+</form>
+
+<!-- # Detta är pilen till vänster om sidan som får fram låtlistan -->
+
+<svg xmlns="http://www.w3.org/2000/svg" id="arrowbutton_left" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right position-absolute top-50 start-0 translate-middle" viewBox="0 0 16 16" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling" fill="currentColor">
+  <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"/>
+</svg>
+
+<div class="" id="arrowbutton_right_div">
+  <!-- Detta är pilen till höger om sidan som ska få fram ticketmaster -->
+  <svg xmlns="http://www.w3.org/2000/svg" id="arrowbutton_right" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-left position-absolute top-50 start-100 translate-middle" viewBox="0 0 16 16" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+    <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5M10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5"/>
+  </svg>
+</div>
+
+<!-- Detta är början på låtlistan -->
+
+<div class="offcanvas offcanvas-start show text-bg-dark w-25 p-1" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+  <div class="offcanvas-header">
+    <h5 id="shownPlaylistName" class="offcanvas-title" id="offcanvasScrollingLabel">Playlist name...</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body w-100 p-0">
+    <div class="list-group m-0" id="trackList">
+
+        <!-- # Detta är alla låtarna som är med i listan, alla får en egen länk med <a> elementet -->
+            <!-- HÄR SKA MAN FÅ UPP ATT VARJE <a> ÄR EN LÅT I LISTAN SOM ANVÄNDAREN HAR VALT -->
+    </div>
+  </div>
+</div>
+<!-- # Detta är youtubevideon -->
+<!-- HÄR SKA YOUTUBE VIDEON ÄNDRAS BEROENDE PÅ LÅTEN-->
+<iframe class="rounded-0 position-absolute top-50 start-50 translate-middle" id="music_video" src="" title="Post Malone - &quot;Goodbyes&quot; ft. Young Thug (Rated R)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</iframe>
+
+
+<div class="offcanvas offcanvas-end text-bg-dark w-25 p-1" tabindex="-1" id="offcanvasRight" data-bs-backdrop="false"  data-bs-scroll="true" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel"> TicketMaster </h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body w-100 p-0">
+    
+    <!-- Under denna finns det en länk med bilden, den ska bytas ut med den som du hämtar från ticketmaster -->
+    <img src="images/microphone-2574511_1280.jpg" class="rounded mx-auto d-block" id="ticketmaster_image" alt="Image of a artist">
+    
+    <!-- Under denna så har du dem olika rubrikerna som är listade under bilden, vill du ändra storlken på dem så kan du ändra mellan h1 som är störst ner til h6 som är minst-->
+    <p class="h2 mt-2 text-center" id = 'artistName'> </p>
+    <p class="h4 mt-2 text-center" id = 'venue'> Nothing here yet, </p>
+    <p class="h6 mt-2 text-center" id = 'date'> Please select an artist </p>
+    <p class="h6 mt-2 text-center" id='time'> to find tickets! </p>
+    
+
+    <!-- Under dennna har du knappen, här kan du byta texten på knappen om du vill. hasttagen i (href="#") mot länken man ska till för att köpa biljetterna -->
+    <div class="text-center">
+      <a class="btn btn-success text-center mt-3" id="ticketmaster_link" href="#" target="_blank" role="button" style="display: none;">No artist selected</a>
+    </div>
+
+  </div>
+</div>
+<!-- # Detta är scripttaggen till sidan från bootstrap, lägg till fler <script> tagger om det behövs -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+        <script src="scripts/playlist_script.js"></script>
+        <script src="scripts/main_script.js"></script>
+
+<!-- # Detta är slutet på sidans content -->
+</body>
+</html>

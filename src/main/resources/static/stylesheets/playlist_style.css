@@ -1,0 +1,45 @@
+#arrowbutton_left, #arrowbutton_right {
+    width: 50px;
+    height: 90%;
+    transition: transform 0.3 ease-in-out;
+}
+#arrowbutton_left:hover {
+    transform: translateY(-50%);
+}
+#arrowbutton_right:hover {
+    transform: translateY(-50%);
+}
+#music_video {
+    align-items: center;
+    justify-content: center;
+    height: 40vw;
+    width: 71.2vw;
+}
+#ticketmaster_image{
+    object-fit: cover;
+    width: 100%;
+    height: 30%;
+}
+#song_list{
+    word-wrap: break-word;
+}
+#no_user_playlist{
+    margin-top: 60px;
+}
+#player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@media (max-width: 500px) {
+    body{
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    #offcanvasScrolling, #offcanvasRight {
+        width: 100% !important;
+    }
+    #offcanvasRight {
+        border-left: none !important;
+    }
+}

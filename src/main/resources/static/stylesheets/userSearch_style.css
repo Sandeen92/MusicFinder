@@ -1,0 +1,11 @@
+.card-img-custom {
+    width: 100%;
+    height: auto;
+}
+#no_user_search{
+    margin-top: 60px;
+}
+.card-title {
+    white-space: nowrap;
+    overflow: hidden;
+}
